@@ -1,0 +1,548 @@
+/* Basis Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #fff;
+}
+
+/* Container für zentrierten Inhalt */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+/* =========================================
+   Mobile Navigation (Hamburger)
+   ========================================= */
+
+/* Standard (Desktop): Button verstecken */
+.menu-toggle {
+    display: none;
+}
+
+/* Mobile Ansicht (unter 768px Breite) */
+@media (max-width: 768px) {
+    
+    /* 1. Button sichtbar machen */
+    .menu-toggle {
+        display: block;
+        background: transparent;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0 10px;
+        color: #111;
+        
+        &:focus { outline: none; }
+    }
+
+    /* 2. Das Menü standardmäßig verstecken */
+    .main-navigation ul {
+        display: none; /* Weg damit! */
+        flex-direction: column;
+        width: 100%;
+        background: #fff;
+        position: absolute;
+        top: 100%; /* Direkt unter dem Header */
+        left: 0;
+        right: 0;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        padding: 20px;
+        border-top: 1px solid #eee;
+        z-index: 999;
+    }
+
+    /* 3. Menüpunkte Styling Mobile */
+    .main-navigation ul li {
+        display: block;
+        width: 100%;
+        margin-bottom: 15px;
+        text-align: center;
+        
+        a {
+            display: block;
+            font-size: 1.2rem;
+            padding: 10px;
+        }
+    }
+
+    /* 4. WENN GEKLICKT (.toggled Klasse via JS) -> Menü anzeigen */
+    .main-navigation.toggled ul {
+        display: flex; /* Wieder da! */
+        animation: slideDown 0.3s ease-out;
+    }
+}
+
+/* Kleine Animation fürs Aufklappen */
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* =========================================
+   Header & Navigation
+   ========================================= */
+
+.site-header {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 20px 0;
+    position: sticky; /* Header bleibt beim Scrollen oben kleben */
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between; /* Links, Mitte, Rechts verteilen */
+    align-items: center;
+}
+
+/* 1. Logo */
+.site-branding {
+    flex: 1; /* Nimmt Platz ein */
+    
+    .site-title {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 800;
+        
+        a { color: #000; text-decoration: none; }
+    }
+}
+
+/* 2. Menü */
+.main-navigation {
+    flex: 2;
+    text-align: center;
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: inline-flex; /* Menüpunkte nebeneinander */
+        gap: 30px;
+
+        li {
+            a {
+                color: #555;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 1rem;
+                transition: color 0.2s;
+
+                &:hover {
+                    color: #000;
+                }
+            }
+
+            /* Aktiver Menüpunkt */
+            &.current-menu-item a {
+                color: #000;
+                border-bottom: 2px solid #d35400; /* Unterstrich beim aktiven Link */
+            }
+        }
+    }
+}
+
+/* 3. Warenkorb Icon */
+.header-actions {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end; /* Rechtsbündig */
+
+    .cart-contents {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: #111;
+        font-weight: 600;
+        background: #f9f9f9;
+        padding: 8px 15px;
+        border-radius: 30px;
+        transition: background 0.2s;
+
+        &:hover {
+            background: #eee;
+        }
+
+        .cart-icon {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+
+        .cart-total {
+            margin-left: 8px;
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: normal;
+        }
+    }
+}
+
+/* Mobile Anpassung (Simpel: Untereinander) */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+ .main-navigation ul {
+        display: none !important; /* <--- Das erzwingt das Ausblenden */
+        flex-direction: column;
+        width: 100%;
+        background: #fff;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        padding: 20px;
+        border-top: 1px solid #eee;
+        z-index: 999;
+    }
+
+    /* ... li Styles bleiben gleich ... */
+
+    /* 4. WENN GEKLICKT: Anzeigen (MIT !IMPORTANT) */
+    .main-navigation.toggled ul {
+        display: flex !important; /* <--- Das erzwingt das Einblenden */
+        animation: slideDown 0.3s ease-out;
+    }
+}
+/* =========================================
+   WooCommerce Layout Anpassungen
+   ========================================= */
+
+/* Produkt-Raster (Grid) */
+ul.products {
+    display: grid;
+    /* Automatische Spalten: Mindestens 250px breit, so viele wie passen */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 40px; /* Abstand zwischen Produkten */
+    padding: 0;
+    list-style: none;
+    margin-top: 40px;
+
+    /* Einzelnes Produkt */
+    li.product {
+        float: none !important; /* Floats deaktivieren (altes Woo CSS überschreiben) */
+        width: 100% !important;
+        margin: 0 !important;
+        
+        /* Karten-Design */
+        border: 1px solid #eee;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Bild */
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Produkttitel */
+        h2.woocommerce-loop-product__title {
+            font-size: 1.1rem;
+            padding: 15px 15px 5px;
+            margin: 0;
+            color: #222;
+        }
+
+        /* Preis */
+        .price {
+            display: block;
+            padding: 0 15px 15px;
+            color: #d35400; /* Preis-Farbe */
+            font-weight: bold;
+            font-size: 1.1rem;
+            
+            del { opacity: 0.5; font-size: 0.9em; margin-right: 5px; } /* Streichpreis */
+        }
+
+        /* "In den Warenkorb" Button */
+        .button {
+            display: block;
+            text-align: center;
+            background: #333;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            margin: 0 15px 15px;
+            border-radius: 4px;
+
+            &:hover {
+                background: #555;
+            }
+        }
+    }
+}
+/* Produkt-Raster (Grid) */
+ul.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 40px;
+    padding: 0;
+    list-style: none;
+    margin-top: 40px;
+
+    /* --- HIER IST DER FIX --- */
+    /* Verhindert, dass alte Clearfix-Elemente Grid-Plätze belegen */
+    &::before,
+    &::after {
+        display: none !important;
+    }
+    /* ------------------------ */
+
+    /* Einzelnes Produkt */
+    li.product {
+        /* ... dein bisheriger Code ... */
+    }
+}
+/* =========================================
+   Design-Upgrade für Detailseite (Safe Mode)
+   ========================================= */
+
+.woocommerce div.product {
+
+    /* 1. Der Titel & Preis */
+    .product_title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #111;
+        letter-spacing: -0.5px;
+    }
+
+    p.price {
+        color: #d35400; /* Deine Akzentfarbe */
+        font-size: 1.5rem;
+        margin-bottom: 25px;
+        
+        del { opacity: 0.4; color: #000; } /* Der durchgestrichene alte Preis */
+        ins { text-decoration: none; font-weight: bold; }
+    }
+
+    /* 2. Der "In den Warenkorb" Button (Weg vom Standard-Lila) */
+    form.cart {
+        margin-bottom: 40px;
+        display: flex;
+        align-items: center; /* Vertikal mittig */
+
+        .quantity input {
+            height: 50px; /* Schön hoch */
+            border: 1px solid #ddd;
+            width: 70px;
+            font-size: 1.1rem;
+            margin-right: 15px; /* Abstand zum Button */
+        }
+
+        button.single_add_to_cart_button {
+            background-color: #111 !important; /* Erzwingt Schwarz */
+            color: #fff !important;
+            height: 50px;
+            padding: 0 40px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            border: none;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background-color: #444 !important;
+                transform: translateY(-2px); /* Kleiner Schwebe-Effekt */
+            }
+        }
+    }
+
+    /* 3. Der "Sale"-Badge (Weg vom Standard-Gelb) */
+    span.onsale {
+        background-color: #d35400 !important; /* Orange passend zum Preis */
+        color: #fff;
+        font-size: 0.9rem;
+        font-weight: 600;
+        line-height: 40px; /* Perfekter Kreis */
+        height: 40px;
+        width: 40px;
+        top: 20px !important;
+        left: 20px !important;
+        right: auto !important;
+        border-radius: 50%;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        min-height: auto;
+        padding: 0;
+    }
+
+    /* 4. Die Tabs unten (Beschreibung etc.) modernisieren */
+    .woocommerce-tabs {
+        margin-top: 60px;
+        
+        ul.tabs {
+            border-bottom: 1px solid #eee;
+            padding: 0;
+            background: transparent !important;
+            
+            li {
+                background: transparent !important;
+                border: none !important;
+                margin: 0 30px 0 0 !important;
+                padding: 0 !important;
+
+                a {
+                    padding: 10px 0 !important;
+                    font-weight: 600;
+                    color: #999 !important;
+                    font-size: 1.1rem;
+                }
+
+                &.active a {
+                    color: #111 !important;
+                    border-bottom: 2px solid #111;
+                }
+            }
+        }
+
+        .panel {
+            padding: 30px 0 !important;
+            box-shadow: none !important;
+            border: none !important;
+            color: #555;
+            line-height: 1.8;
+        }
+    }
+}
+/* =========================================
+   Warenkorb & Kasse (Checkout)
+   ========================================= */
+
+/* Titel der Seite */
+.page .entry-header .entry-title {
+    margin: 40px 0 30px;
+    font-size: 2.5rem;
+    text-align: center;
+    font-weight: 800;
+}
+
+/* Die Tabelle im Warenkorb */
+.woocommerce table.shop_table {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    border-collapse: separate; /* Wichtig für Border-Radius */
+    border-spacing: 0;
+    width: 100%;
+    margin-bottom: 40px;
+
+    th, td {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        text-align: left;
+    }
+
+    th {
+        background: #f9f9f9;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+    }
+
+    /* Produktbilder in der Tabelle klein halten */
+    img {
+        width: 80px;
+        border-radius: 4px;
+    }
+    
+    /* Entfernen-Kreuz */
+    a.remove {
+        color: #d35400 !important;
+        font-weight: bold;
+        font-size: 1.5rem;
+        text-decoration: none;
+        &:hover { background: #fee; border-radius: 50%; }
+    }
+}
+
+/* Kasse & Cart Totals Box */
+.cart-collaterals, .checkout_totals {
+    background: #fdfdfd;
+    border: 1px solid #eee;
+    padding: 30px;
+    border-radius: 8px;
+    
+    h2 {
+        font-size: 1.5rem;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+}
+
+/* Formularfelder (Eingabe) schön machen */
+.woocommerce form .form-row {
+    padding: 3px;
+    margin: 0 0 15px;
+
+    input.input-text, textarea {
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 100%;
+        font-size: 1rem;
+        
+        &:focus {
+            border-color: #000;
+            outline: none;
+        }
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+}
+
+/* Der wichtigste Button: "Proceed to Checkout" / "Jetzt kaufen" */
+.wc-proceed-to-checkout a.checkout-button, 
+button#place_order {
+    background-color: #d35400 !important;
+    color: #fff !important;
+    font-size: 1.1rem !important;
+    padding: 15px 30px !important;
+    display: block;
+    width: 100%;
+    text-align: center;
+    border-radius: 4px;
+    transition: background 0.3s;
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+        background-color: #b04600 !important;
+    }
+}
+
+/* Coupon Code Feld verstecken oder hübsch machen (Optional) */
+.coupon {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    
+    input { width: auto !important; }
+}
