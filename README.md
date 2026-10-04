@@ -39,3 +39,7 @@ Feel free to contribute to this project by submitting issues or pull requests on
 ## License
 
 This project is open source and available under the MIT License.
+
+## Impressum
+
+Anbieterkennzeichnung des Theme-Herstellers: [IMPRESSUM.md](IMPRESSUM.md). Sie gilt für dieses Repository, nicht für Shops, die das Theme verwenden — dort gehört das eigene Impressum des Shopbetreibers hin.
