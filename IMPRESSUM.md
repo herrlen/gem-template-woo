@@ -12,6 +12,10 @@ Norderreihe 21
 
 Vertretungsberechtigte Geschäftsführerin: Keren Suh
 
+## Kontakt
+
+E-Mail: hello@lensuh.de
+
 ## Eintragung im Handelsregister
 
 Registergericht: Amtsgericht Hamburg  
