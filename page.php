@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) || exit;
 /**
  * Template für alle statischen Seiten (Warenkorb, Kasse, Impressum, Kontakt)
  */

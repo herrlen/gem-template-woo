@@ -50,12 +50,12 @@ add_action( 'after_setup_theme', 'lensuh_register_menus' );
  * Zeigt "Cart (3)" oder ein Icon an.
  */
 function lensuh_woocommerce_cart_link() {
-    if ( ! class_exists( 'WooCommerce' ) ) return;
+    if ( ! class_exists( 'WooCommerce' ) || ! WC()->cart ) return;
     ?>
     <a class="cart-contents" href="<?php echo esc_url( wc_get_cart_url() ); ?>" title="<?php esc_attr_e( 'Warenkorb ansehen', 'lensuh' ); ?>">
         <span class="cart-icon">🛒</span>
-        <span class="cart-count"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
-        <span class="cart-total"><?php echo WC()->cart->get_cart_total(); ?></span>
+        <span class="cart-count"><?php echo absint( WC()->cart->get_cart_contents_count() ); ?></span>
+        <span class="cart-total"><?php echo wp_kses_post( WC()->cart->get_cart_total() ); ?></span>
     </a>
     <?php
 }
