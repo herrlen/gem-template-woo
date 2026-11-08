@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) || exit;
 /**
  * Der "Catch-All" Template für WooCommerce.
  * Sorgt dafür, dass Shop-Seiten genau wie der Rest der Seite aussehen.
